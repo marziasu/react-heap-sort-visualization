@@ -1,0 +1,64 @@
+import { motion } from 'framer-motion';
+import './HeapNode.css';
+
+const HeapNode = ({ person, isHighlighted, isExtracted, level, isPaused, onClick }) => {
+    const nodeVariants = {
+        normal: {
+            scale: 1,
+            backgroundColor: 'hsl(240, 70%, 45%)',
+            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
+        },
+        highlighted: {
+            scale: 1.15,
+            backgroundColor: 'hsl(280, 80%, 60%)',
+            boxShadow: '0 6px 20px rgba(167, 139, 250, 0.6)',
+            transition: {
+                duration: 0.3,
+                repeat: 3,
+                repeatType: 'reverse',
+            },
+        },
+        paused: {
+            scale: 1.15, // Keep same size as highlighted
+            backgroundColor: 'hsl(320, 90%, 60%)', // Just change color
+            boxShadow: '0 6px 20px rgba(167, 139, 250, 0.6)', // Standard shadow
+        },
+        extracted: {
+            scale: 0.9,
+            backgroundColor: 'hsl(140, 70%, 50%)',
+            boxShadow: '0 4px 12px rgba(74, 222, 128, 0.4)',
+        },
+    };
+
+    const textVariants = {
+        normal: { color: '#ffffff' },
+        highlighted: { color: '#ffffff', fontWeight: 700 },
+        paused: { color: '#ffffff', fontWeight: 700 },
+        extracted: { color: '#ffffff', fontWeight: 600 },
+    };
+
+    const getAnimationState = () => {
+        if (isExtracted) return 'extracted';
+        if (isHighlighted && isPaused) return 'paused';
+        if (isHighlighted) return 'highlighted';
+        return 'normal';
+    };
+
+    return (
+        <motion.div
+            className="heap-node"
+            variants={nodeVariants}
+            initial="normal"
+            animate={getAnimationState()}
+            whileHover={{ scale: 1.1 }}
+            onClick={onClick}
+        >
+            <motion.div className="node-content" variants={textVariants}>
+                <div className="person-id">ID: {person.personId}</div>
+                <div className="person-weight">W: {person.weight}</div>
+            </motion.div>
+        </motion.div>
+    );
+};
+
+export default HeapNode;

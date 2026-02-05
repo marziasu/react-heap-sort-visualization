@@ -1,0 +1,325 @@
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.control-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #6366f1;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.title-icon {
+    font-size: 24px;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.control-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.control-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.button-icon {
+    font-size: 16px;
+}
+
+.control-button.primary {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+}
+
+.control-button.primary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.control-button.secondary {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+}
+
+.control-button.secondary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.control-button.preview {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.control-button.preview:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.control-button.tertiary {
+    background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    color: white;
+}
+
+.control-button.tertiary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+}
+
+.control-button.reset {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.control-button.reset:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+/* Animation Controls */
+.animation-controls {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.animation-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #8b5cf6;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.animation-icon {
+    font-size: 18px;
+}
+
+.playback-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.playback-button {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    transition: all 0.3s ease;
+}
+
+.playback-button:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+}
+
+.playback-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.playback-button.play-pause {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+}
+
+.playback-button.playing {
+    background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+}
+
+.playback-button.paused {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.progress-info {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.step-counter {
+    display: inline-block;
+    background: rgba(139, 92, 246, 0.2);
+    color: #7c3aed;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+}
+
+.speed-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.speed-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #8b5cf6;
+    font-family: 'Inter', sans-serif;
+}
+
+.speed-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.speed-button {
+    padding: 8px 16px;
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 8px;
+    background: white;
+    color: #8b5cf6;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.speed-button:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.5);
+}
+
+.speed-button.active {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.info-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.info-card {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.1) 100%);
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+}
+
+.info-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #4f46e5;
+    font-family: 'Inter', sans-serif;
+}
+
+.dark-mode-toggle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    transition: all 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+}
+
+@media (max-width: 768px) {
+    .controls-container {
+        flex-direction: column;
+    }
+
+    .control-section {
+        width: 100%;
+    }
+
+    .control-buttons {
+        flex-direction: column;
+    }
+
+    .control-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .info-section {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .playback-controls {
+        gap: 8px;
+    }
+
+    .playback-button {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .playback-button.play-pause {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}

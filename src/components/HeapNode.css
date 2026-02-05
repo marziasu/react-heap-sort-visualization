@@ -1,0 +1,49 @@
+.heap-node {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease;
+}
+
+.node-content {
+    text-align: center;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    z-index: 1;
+}
+
+.person-id {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+}
+
+.person-weight {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .heap-node {
+        width: 60px;
+        height: 60px;
+    }
+
+    .person-id {
+        font-size: 10px;
+    }
+
+    .person-weight {
+        font-size: 14px;
+    }
+}
