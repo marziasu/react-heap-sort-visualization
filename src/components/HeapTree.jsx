@@ -39,13 +39,15 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
     // Generate connection lines
     const generateLines = () => {
         const lines = [];
-        heap.forEach((_, index) => {
+        heap.forEach((person, index) => {
+            if (person.isGhost) return; // Don't draw lines from a ghost node
+
             const leftChild = 2 * index + 1;
             const rightChild = 2 * index + 2;
 
             const parent = getNodePosition(index);
 
-            if (leftChild < heap.length) {
+            if (leftChild < heap.length && !heap[leftChild].isGhost) {
                 const left = getNodePosition(leftChild);
                 lines.push({
                     key: `line-${index}-${leftChild}`,
@@ -57,7 +59,7 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
                 });
             }
 
-            if (rightChild < heap.length) {
+            if (rightChild < heap.length && !heap[rightChild].isGhost) {
                 const right = getNodePosition(rightChild);
                 lines.push({
                     key: `line-${index}-${rightChild}`,
@@ -78,7 +80,10 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
     const treeHeight = maxLevels * 120 + 100;
 
     return (
-        <div className="heap-tree-container">
+        <div
+            className="heap-tree-container"
+            style={{ width: treeWidth, height: treeHeight, margin: '0 auto' }}
+        >
             <svg
                 className="heap-tree-svg"
                 width={treeWidth}
@@ -101,44 +106,51 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
                         initial={{ opacity: 0 }}
                     />
                 ))}
+            </svg>
 
-                {/* Nodes */}
+            {/* Nodes Layer - HTML Elements */}
+            <div className="heap-nodes-layer">
                 <AnimatePresence>
                     {heap.map((person, index) => {
+                        if (person.isGhost) return null;
+
                         const { x, y, level } = getNodePosition(index);
                         const isHighlighted = highlightedIndices.includes(index);
 
                         return (
-                            <motion.g
+                            <motion.div
                                 key={person.personId}
+                                layoutId={`node-${person.personId}`} // Shared ID for magic move
+                                className="heap-node-wrapper"
+                                initial={{ scale: 0, opacity: 0 }}
                                 animate={{
-                                    x: x - 40,
-                                    y: y - 40,
                                     opacity: 1,
-                                    scale: 1
+                                    scale: 1,
+                                    zIndex: isHighlighted ? 100 : 1
                                 }}
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                exit={{ opacity: 0, scale: 0 }}
+                                style={{
+                                    position: 'absolute',
+                                    left: x,
+                                    top: y
+                                }}
+                                layout
                                 transition={{
-                                    type: 'spring',
-                                    stiffness: 300,
-                                    damping: 30,
-                                    layout: { duration: 0.3 }
+                                    layout: { type: "spring", stiffness: 120, damping: 25, mass: 1 },
+                                    opacity: { duration: 0.2 },
+                                    scale: { duration: 0.2 }
                                 }}
                             >
-                                <foreignObject width="100" height="100" x="-10" y="-10">
-                                    <HeapNode
-                                        person={person}
-                                        isHighlighted={isHighlighted}
-                                        isPaused={isPaused}
-                                        level={level}
-                                    />
-                                </foreignObject>
-                            </motion.g>
+                                <HeapNode
+                                    person={person}
+                                    isHighlighted={isHighlighted}
+                                    isPaused={isPaused}
+                                    level={level}
+                                />
+                            </motion.div>
                         );
                     })}
                 </AnimatePresence>
-            </svg>
+            </div>
         </div>
     );
 };

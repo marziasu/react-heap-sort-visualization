@@ -9,14 +9,11 @@ const HeapNode = ({ person, isHighlighted, isExtracted, level, isPaused, onClick
             boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
         },
         highlighted: {
-            scale: 1.15,
-            backgroundColor: 'hsl(280, 80%, 60%)',
-            boxShadow: '0 6px 20px rgba(167, 139, 250, 0.6)',
-            transition: {
-                duration: 0.3,
-                repeat: 3,
-                repeatType: 'reverse',
-            },
+            scale: 1.2,
+            backgroundColor: 'hsl(45, 90%, 55%)', // Vibrant Golden/Amber
+            boxShadow: '0 0 25px rgba(245, 158, 11, 0.8)',
+            border: '4px solid #ffffff',
+            zIndex: 50,
         },
         paused: {
             scale: 1.15, // Keep same size as highlighted

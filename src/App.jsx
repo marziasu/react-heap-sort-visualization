@@ -4,7 +4,7 @@ import HeapTree from './components/HeapTree';
 import Controls from './components/Controls';
 import AddPersonForm from './components/AddPersonForm';
 import SortedList from './components/SortedList';
-import { MaxHeap, heapSort } from './utils/heapOperations';
+import { MaxHeap, heapSortWithIntuitionSteps } from './utils/heapOperations';
 import { initialPeople } from './data/initialData';
 import './App.css';
 
@@ -17,7 +17,7 @@ function App() {
   const isPausedRef = useRef(false);
   const [sortSteps, setSortSteps] = useState([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [animationSpeed, setAnimationSpeed] = useState(800);
+  const [animationSpeed, setAnimationSpeed] = useState(1200);
   const [nextPersonId, setNextPersonId] = useState(31);
   const [darkMode, setDarkMode] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -89,7 +89,7 @@ function App() {
         showNotification(step.description, 'info');
       }
 
-      await new Promise(resolve => setTimeout(resolve, animationSpeed));
+      await new Promise(resolve => setTimeout(resolve, animationSpeed + 200));
     }
 
     setHighlightedIndices([]);
@@ -112,7 +112,7 @@ function App() {
         setSortedPeople([...sortedPeople, step.extracted]);
       }
       showNotification(step.description || 'Extracting...', 'info');
-      await new Promise(resolve => setTimeout(resolve, animationSpeed));
+      await new Promise(resolve => setTimeout(resolve, animationSpeed + 200));
     }
 
     setHighlightedIndices([]);
@@ -306,10 +306,8 @@ function App() {
               />
             </motion.div>
 
-            {/* Sorted List Moved Here (Below Tree) */}
-            {sortedPeople.length > 0 && (
-              <SortedList sortedPeople={sortedPeople} />
-            )}
+            {/* Sorted List (Always Visible Field Below Tree) */}
+            <SortedList sortedPeople={sortedPeople} />
           </div>
         </div>
 

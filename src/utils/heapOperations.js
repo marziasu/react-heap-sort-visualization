@@ -35,22 +35,29 @@ export class MaxHeap {
     insertWithSteps(person) {
         const steps = [];
         this.heap.push(person);
+        let currentIdx = this.heap.length - 1;
+
+        // Step 1: Just the addition
         steps.push({
             heap: [...this.heap],
-            highlighted: [0], // Always highlight root
-            description: `Adding ${person.weight} to the heap.`
+            highlighted: [currentIdx],
+            description: `Step 1: Added ${person.weight} at the end of the heap.`
         });
 
-        let currentIdx = this.heap.length - 1;
         while (currentIdx > 0) {
             const parentIdx = this.getParentIndex(currentIdx);
+
             if (this.heap[currentIdx].weight > this.heap[parentIdx].weight) {
+                // Perform the swap in the real state
                 this.swap(currentIdx, parentIdx);
                 currentIdx = parentIdx;
+
+                // CRITICAL: We push the state AFTER the swap so Framer Motion sees 
+                // that the IDs have changed positions and animates the circles sliding.
                 steps.push({
                     heap: [...this.heap],
-                    highlighted: [0], // Always highlight root
-                    description: `Heapify-Up: Moving to correct position.`
+                    highlighted: [currentIdx, this.getLeftChildIndex(currentIdx), this.getRightChildIndex(currentIdx)].filter(i => i < this.heap.length),
+                    description: `SWAPPING: ${person.weight} moves up to parent position.`
                 });
             } else {
                 break;
@@ -66,39 +73,71 @@ export class MaxHeap {
 
         if (this.heap.length === 1) {
             const extracted = this.heap.pop();
-            steps.push({ heap: [], highlighted: [], extracted: extracted });
+            steps.push({
+                heap: [],
+                highlighted: [],
+                extracted: extracted,
+                description: `Only one element left: ${extracted.weight}. Extracting it.`
+            });
             return steps;
         }
 
-        // 1. Swap root with last element
         const lastIdx = this.heap.length - 1;
         const lastElement = this.heap[lastIdx];
 
-        // Highlight root before swap
+        // Step 1: Highlight Root
         steps.push({
             heap: [...this.heap],
             highlighted: [0],
-            description: `Current Root: ${max.weight}. Swapping with last element ${lastElement.weight}.`
+            description: `Root (${max.weight}) will be extracted.`
         });
 
-        this.swap(0, lastIdx);
-        const extracted = this.heap.pop();
+        // Step 2: Extract Root Visualization (Root leaves, leaving empty space)
+        const ghostHeap = [...this.heap];
+        ghostHeap[0] = { ...this.heap[0], isGhost: true }; // Mark as ghost to hide it
+        const extracted = this.heap[0];
+
+        steps.push({
+            heap: ghostHeap,
+            highlighted: [],
+            extracted: extracted, // Moves to list
+            description: `Root (${max.weight}) extracted. Position is now empty.`
+        });
+
+        // Step 3: Highlight Last Node (to fill the empty space)
+        steps.push({
+            heap: ghostHeap, // Still has ghost at 0
+            highlighted: [lastIdx],
+            description: `Last element (${lastElement.weight}) selected to fill the empty root.`
+        });
+
+        // Step 4: Move Last Node to Root
+        this.heap[0] = this.heap.pop(); // Actual data move: Last becomes Root. Old Root gone.
 
         steps.push({
             heap: [...this.heap],
             highlighted: [0],
-            extracted: extracted,
-            description: `Extracted ${extracted.weight}. New Root is ${this.heap[0].weight}.`
+            description: `Moved ${lastElement.weight} to Root position.`
         });
 
-        // 2. Heapify Down
+        // Step 5: Heapify Down...
         let currentIdx = 0;
-        const length = this.heap.length;
 
         while (true) {
+            const length = this.heap.length;
             const leftIdx = this.getLeftChildIndex(currentIdx);
             const rightIdx = this.getRightChildIndex(currentIdx);
             let largestIdx = currentIdx;
+
+            const candidates = [currentIdx];
+            if (leftIdx < length) candidates.push(leftIdx);
+            if (rightIdx < length) candidates.push(rightIdx);
+
+            steps.push({
+                heap: [...this.heap],
+                highlighted: candidates,
+                description: `Checking: Parent (${this.heap[currentIdx].weight}) vs children.`
+            });
 
             if (leftIdx < length && this.heap[leftIdx].weight > this.heap[largestIdx].weight) {
                 largestIdx = leftIdx;
@@ -108,14 +147,24 @@ export class MaxHeap {
             }
 
             if (largestIdx !== currentIdx) {
+                const val1 = this.heap[currentIdx].weight;
+                const val2 = this.heap[largestIdx].weight;
+
                 this.swap(currentIdx, largestIdx);
-                currentIdx = largestIdx;
+
                 steps.push({
                     heap: [...this.heap],
-                    highlighted: [0], // Always highlight root
-                    description: `Heapify-Down: Adjusting root to maintain Max-Heap.`
+                    highlighted: [currentIdx, largestIdx],
+                    description: `Swapping: ${val1} ↓ with ${val2} ↑`
                 });
+
+                currentIdx = largestIdx;
             } else {
+                steps.push({
+                    heap: [...this.heap],
+                    highlighted: [currentIdx],
+                    description: `Heap restored.`
+                });
                 break;
             }
         }
@@ -131,12 +180,16 @@ export class MaxHeap {
             const leftIdx = this.getLeftChildIndex(currentIdx);
             const rightIdx = this.getRightChildIndex(currentIdx);
             let largestIdx = currentIdx;
+
             if (leftIdx < length && this.heap[leftIdx].weight > this.heap[largestIdx].weight) largestIdx = leftIdx;
             if (rightIdx < length && this.heap[rightIdx].weight > this.heap[largestIdx].weight) largestIdx = rightIdx;
+
             if (largestIdx !== currentIdx) {
                 this.swap(currentIdx, largestIdx);
                 currentIdx = largestIdx;
-            } else break;
+            } else {
+                break;
+            }
         }
     }
 
@@ -151,12 +204,14 @@ export function heapSortWithIntuitionSteps(initialHeapArray) {
 
     while (heap.size() > 0) {
         const steps = heap.extractMaxWithSteps();
-        if (steps.length > 0) {
-            const lastStep = steps[steps.length - 1];
-            sorted.push(lastStep.extracted);
-            // Enrich steps with current sorted state
-            steps.forEach(s => s.sortedSoFar = [...sorted]);
-            allSteps.push(...steps);
+
+        for (const step of steps) {
+            if (step.extracted) {
+                sorted.push(step.extracted);
+            }
+            // Add a copy of current sorted array to each step
+            step.sortedSoFar = [...sorted];
+            allSteps.push(step);
         }
     }
 

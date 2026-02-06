@@ -2,6 +2,11 @@
     position: relative;
     width: 80px;
     height: 80px;
+    min-width: 80px;
+    min-height: 80px;
+    max-width: 80px;
+    max-height: 80px;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -11,6 +16,8 @@
     border: 3px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     transition: transform 0.2s ease;
+    box-sizing: border-box;
+    /* Ensure border is included in width */
 }
 
 .node-content {
@@ -37,6 +44,8 @@
     .heap-node {
         width: 60px;
         height: 60px;
+        min-width: 60px;
+        min-height: 60px;
     }
 
     .person-id {
