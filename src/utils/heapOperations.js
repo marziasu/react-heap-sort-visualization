@@ -77,68 +77,91 @@ export class MaxHeap {
                 heap: [],
                 highlighted: [],
                 extracted: extracted,
-                description: `Only one element left: ${extracted.weight}. Extracting it.`
+                description: `Only one element left: Weight ${extracted.weight}. Extracting it.`
             });
             return steps;
         }
 
         const lastIdx = this.heap.length - 1;
-        const lastElement = this.heap[lastIdx];
+        // CRITICAL: Create DEEP copies so these values don't change when heap is modified
+        const lastElement = { ...this.heap[lastIdx] };
+        const extracted = { ...this.heap[0] };
 
-        // Step 1: Highlight Root
+        // Step 1: Highlight Root (Visual Confirmation)
+        // Show the user WHICH node is about to be removed
         steps.push({
             heap: [...this.heap],
             highlighted: [0],
-            description: `Root (${max.weight}) will be extracted.`
+            description: `1. Current Root (${max.weight}) is the largest. Selecting it for extraction.`
         });
 
-        // Step 2: Extract Root Visualization (Root leaves, leaving empty space)
+        // Step 2: Extract Root (Visual Drop)
+        // We create a ghost heap where the root is hidden (isGhost) to show it's gone
         const ghostHeap = [...this.heap];
-        ghostHeap[0] = { ...this.heap[0], isGhost: true }; // Mark as ghost to hide it
-        const extracted = this.heap[0];
+        ghostHeap[0] = { ...this.heap[0], isGhost: true };
 
         steps.push({
             heap: ghostHeap,
             highlighted: [],
-            extracted: extracted, // Moves to list
-            description: `Root (${max.weight}) extracted. Position is now empty.`
+            extracted: extracted,
+            description: `2. Root extracted. The root position is now empty.`
         });
 
-        // Step 3: Highlight Last Node (to fill the empty space)
+        // Step 3: Highlight Last Element (Visual Selection for Replacement)
+        // Show the user WHICH node will fill the empty spot
         steps.push({
-            heap: ghostHeap, // Still has ghost at 0
+            heap: ghostHeap, // Root is still ghost/empty
             highlighted: [lastIdx],
-            description: `Last element (${lastElement.weight}) selected to fill the empty root.`
+            description: `3. Selecting the last element (${lastElement.weight}) to fill the empty root.`
         });
 
         // Step 4: Move Last Node to Root
-        this.heap[0] = this.heap.pop(); // Actual data move: Last becomes Root. Old Root gone.
+        // We already have lastElement as a deep copy from line 86
+        // Now modify the actual heap
+        this.heap.pop(); // Remove last element
+        this.heap[0] = lastElement; // Place the saved copy at root
 
         steps.push({
             heap: [...this.heap],
             highlighted: [0],
-            description: `Moved ${lastElement.weight} to Root position.`
+            description: `4. Moved last element (${lastElement.weight}) to the root position. Now need to heapify down.`
         });
 
-        // Step 5: Heapify Down...
+        // Step 5+: Start Heapify Down Process
         let currentIdx = 0;
+        let stepCount = 5;
 
         while (true) {
             const length = this.heap.length;
             const leftIdx = this.getLeftChildIndex(currentIdx);
             const rightIdx = this.getRightChildIndex(currentIdx);
+
+            // If no children exist, we're done
+            if (leftIdx >= length) {
+                steps.push({
+                    heap: [...this.heap],
+                    highlighted: [currentIdx],
+                    description: `${stepCount}. No children to compare. Node is at correct position.`
+                });
+                break;
+            }
+
             let largestIdx = currentIdx;
 
+            // Collect all candidates (parent + children)
             const candidates = [currentIdx];
             if (leftIdx < length) candidates.push(leftIdx);
             if (rightIdx < length) candidates.push(rightIdx);
 
+            // Step N: Highlight all nodes being compared (parent + children)
             steps.push({
                 heap: [...this.heap],
                 highlighted: candidates,
-                description: `Checking: Parent (${this.heap[currentIdx].weight}) vs children.`
+                description: `${stepCount}. Comparing Parent (${this.heap[currentIdx].weight}) with children to find the largest.`
             });
+            stepCount++;
 
+            // Find the largest among parent and children
             if (leftIdx < length && this.heap[leftIdx].weight > this.heap[largestIdx].weight) {
                 largestIdx = leftIdx;
             }
@@ -147,23 +170,27 @@ export class MaxHeap {
             }
 
             if (largestIdx !== currentIdx) {
+                // Need to swap
                 const val1 = this.heap[currentIdx].weight;
                 const val2 = this.heap[largestIdx].weight;
 
                 this.swap(currentIdx, largestIdx);
 
+                // Step N+1: Show the swap result
                 steps.push({
                     heap: [...this.heap],
-                    highlighted: [currentIdx, largestIdx],
-                    description: `Swapping: ${val1} ↓ with ${val2} ↑`
+                    highlighted: [largestIdx, currentIdx],
+                    description: `${stepCount}. Child (${val2}) is larger than Parent (${val1}). Swapping them.`
                 });
+                stepCount++;
 
                 currentIdx = largestIdx;
             } else {
+                // Heap property satisfied - done heapifying
                 steps.push({
                     heap: [...this.heap],
                     highlighted: [currentIdx],
-                    description: `Heap restored.`
+                    description: `${stepCount}. Parent is larger than or equal to children. Heapify complete. Correct position found.`
                 });
                 break;
             }

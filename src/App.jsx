@@ -81,7 +81,7 @@ function App() {
 
       const step = allSteps[i];
       setCurrentStepIndex(i);
-      setHeap(new MaxHeap(step.heap));
+      setHeap(new MaxHeap(step.heap, true));  // skipBuild = true
       setHighlightedIndices(step.highlighted);
       setSortedPeople(step.sortedSoFar || []);
 
@@ -106,7 +106,7 @@ function App() {
     const steps = heap.extractMaxWithSteps();
 
     for (const step of steps) {
-      setHeap(new MaxHeap(step.heap));
+      setHeap(new MaxHeap(step.heap, true));  // skipBuild = true
       setHighlightedIndices(step.highlighted);
       if (step.extracted) {
         setSortedPeople([...sortedPeople, step.extracted]);
@@ -146,7 +146,7 @@ function App() {
     setCurrentStepIndex(nextIndex);
     const step = sortSteps[nextIndex];
 
-    setHeap(new MaxHeap(step.heap));
+    setHeap(new MaxHeap(step.heap, true));  // skipBuild = true
     setHighlightedIndices(step.highlighted);
     setSortedPeople(step.sortedSoFar || []);
   };
@@ -159,7 +159,7 @@ function App() {
     setCurrentStepIndex(prevIndex);
     const step = sortSteps[prevIndex];
 
-    setHeap(new MaxHeap(step.heap));
+    setHeap(new MaxHeap(step.heap, true));  // skipBuild = true
     setHighlightedIndices(step.highlighted);
     setSortedPeople(step.sortedSoFar || []);
   };
