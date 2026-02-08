@@ -35,7 +35,7 @@ Then open **[http://localhost:5173](http://localhost:5173)** in your browser.
 
 ## 🏆 3. Pro Tips
 
-- **Check Results Early**: Click **"👁️ Preview"** to see the final sorted list without running the full animation.
+- **Check Results Early**: Click **"👁️ Preview"** to show or hide the final sorted list without running the full animation.
 - **Detailed Inspection**: Click on any node in the tree or the sorted list to open a **Detail Modal** with more information.
 - **Dark Mode**: Click the **🌙** moon icon in the header for a premium dark experience that saves your eyes!
 - **Data Export**: Once sorting is done, use the **"💾 Export"** button to save a JSON report of the results.

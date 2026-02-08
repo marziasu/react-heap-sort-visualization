@@ -16,11 +16,12 @@
 - ✅ **Startup loading** - Immediate visualization on application entry.
 
 ### Heap Operations
-- ✅ **Dynamic insertion** - Add people with custom weights (1-500 kg).
+- ✅ **Interactive Insertion** - Add new people via the **Add Person Form** with real-time Heapify-Up animations.
 - ✅ **Auto ID generation** - Sequential IDs starting at 31 for new additions.
 - ✅ **Heap sort** - Visual extraction process building a sorted person list.
 - ✅ **Step-by-step mode** - Manual control over individual extraction steps.
 - ✅ **Intuition-based visualization** - Every comparison and swap is explicitly explained.
+- ✅ **Interactive Nodes** - Click any node in the tree to view structural relationships and data details.
 
 ## 🎨 UI & Visualization - COMPLETE ✅
 
@@ -30,6 +31,7 @@
 - ✅ **Connection highlights** - Lines glow when parent-child relationships are being evaluated.
 - ✅ **Empty state** - Professional fallback message when no nodes exist.
 - ✅ **Responsive tree** - Optimized for mobile, tablet, and desktop screens.
+- ✅ **Multi-Directional Scroll** - Visualization container automatically enables vertical and horizontal scrolling as the heap grows beyond 30 nodes.
 
 ### Node Animations
 - ✅ **Framer Motion integration** - Fluid physical animations for all movements.
@@ -42,7 +44,7 @@
 - ✅ **Animation Speed Slider** - Real-time adjustment (500ms to 2000ms).
 - ✅ **Pause/Resume** - Instantly stop or continue automated sorting processes.
 - ✅ **Step Controls** - Forward (Next) and Backward (Previous) step navigation during pause.
-- ✅ **Preview Sorted List** - Toggle to see the final sorted result immediately.
+- ✅ **Preview Sorted List** - Toggle to show or hide the final sorted result immediately.
 - ✅ **Random Add** - Quick "Add Random" person button for testing.
 - ✅ **Reset** - One-click restoration of the initial 30-person state.
 

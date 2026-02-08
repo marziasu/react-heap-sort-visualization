@@ -31,11 +31,16 @@ A professional, interactive React application designed to visualize Max-Heap dat
 ## ✨ Features Implemented
 
 - **🌳 Dynamic Binary Tree**: Real-time SVG visualization of the heap structure that adapts to any data size.
+- **➕ Interactive Insertion**: Easily add new people via the **Add To Heap** form and watch the real-time **Heapify-Up** animation as they find their correct position in the tree.
 - **⚡ Intuition-Based Animations**: Every insertion and extraction is broken down into comparison and swap phases with descriptive notifications.
 - **⏭️ Manual Step Control**: While paused, navigate through the sorting process one step at a time using 'Previous' and 'Next' buttons.
 - **⚙️ Simulation Speed**: Adjustable animation speed (500ms to 2000ms) to suit different learning paces.
 - **🌓 Dark & Light Modes**: Full theme support with persistent memory using a modern glassmorphism design.
 - **💾 JSON Export**: Ability to download the final sorted list of people for external use.
+- **👁️ Instant Preview**: Toggle a preview of the final sorted list at any time (show/hide) without running the full animation sequence.
+- **🔄 System Reset**: Instantly restore the application to its initial state with the original 30-person dataset.
+- **🔍 Interactive Node Details**: Click on any node in the tree to view a detailed modal showing its position, tree level, parent, and children identifiers.
+- **↕️↔️ Infinite Multi-Directional Scroll**: The visualization area automatically scales for large heaps (30+ nodes), supporting both smooth vertical and horizontal scrolling to explore the complete tree structure.
 - **📱 Fully Responsive**: A seamless experience across mobile, tablet, and desktop devices.
 
 ---
@@ -47,7 +52,7 @@ Follow these steps to set up the project locally:
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/marziasu/react-heap-sort-visualization.git
-   cd heap-visualizer
+   cd react-heap-sort-visualization
    ```
 
 2. **Install dependencies:**
@@ -73,4 +78,10 @@ Follow these steps to set up the project locally:
 
 ---
 
-**Built with ❤️ by Marzia Sultana**
+## 👤 Author
+
+**Marzia**
+
+- GitHub: [@marziasu](https://github.com/marziasu)
+
+---
