@@ -2,6 +2,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './SortedList.css';
 
 const SortedList = ({ sortedPeople, isPreview }) => {
+    const handleExportJSON = () => {
+        const dataStr = JSON.stringify(sortedPeople, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = "heap_sorted_list.json";
+        link.href = url;
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <motion.div
             className="sorted-list-container"
@@ -18,6 +29,16 @@ const SortedList = ({ sortedPeople, isPreview }) => {
                 <div className="sorted-count">
                     {sortedPeople.length} {sortedPeople.length === 1 ? 'Person' : 'People'} Sorted
                 </div>
+                {sortedPeople.length > 0 && (
+                    <button
+                        className="export-button"
+                        onClick={handleExportJSON}
+                        title="Download as JSON"
+                    >
+                        <span className="export-icon">💾</span>
+                        Export JSON
+                    </button>
+                )}
             </div>
 
             {sortedPeople.length === 0 ? (
