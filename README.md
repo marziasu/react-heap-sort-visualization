@@ -26,13 +26,19 @@ A professional, interactive React application designed to visualize Max-Heap dat
 <!-- 📸 PLACEHOLDER: Heap sort steps and final sorted list -->
 ![Heap Sort Process](./screenshots/heap-sort-steps.png)
 
+### 4. Interactive Node Details
+*Click on any node to reveal its metadata and structural relationships in a clean, professional modal.*
+
+<!-- 📸 Showcase: Node Details Modal -->
+![Interactive Node Details](./screenshots/node-details.gif)
+
 ---
 
 ## ✨ Features Implemented
 
 - **🌳 Dynamic Binary Tree**: Real-time SVG visualization of the heap structure that adapts to any data size.
 - **➕ Interactive Insertion**: Easily add new people via the **Add To Heap** form and watch the real-time **Heapify-Up** animation as they find their correct position in the tree.
-- **⚡ Intuition-Based Animations**: Every insertion and extraction is broken down into comparison and swap phases with descriptive notifications.
+- **⚡ Intuition-Based Animations**: Every insertion and extraction is broken down into comparison and swap phases with **smooth sliding animations** that show nodes physically moving to their new positions.
 - **⏭️ Manual Step Control**: While paused, navigate through the sorting process one step at a time using 'Previous' and 'Next' buttons.
 - **⚙️ Simulation Speed**: Adjustable animation speed (500ms to 2000ms) to suit different learning paces.
 - **🌓 Dark & Light Modes**: Full theme support with persistent memory using a modern glassmorphism design.

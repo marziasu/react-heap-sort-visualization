@@ -37,7 +37,7 @@
 - ✅ **Framer Motion integration** - Fluid physical animations for all movements.
 - ✅ **Ghost Nodes** - Temporary visual "ghosts" during extraction to show where nodes were.
 - ✅ **Highlight system** - Color-coded glowing effects for active comparisons and swaps.
-- ✅ **Spring physics** - Natural, high-performance node relocation during heapify.
+- ✅ **Spring physics & Sliding**: Natural, high-performance **sliding animations** during node swaps and relocation.
 - ✅ **Path visualization** - Dynamic line rendering that follows node movement.
 
 ### Controls & Navigation
