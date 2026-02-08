@@ -30,16 +30,7 @@ const Controls = ({
                 </h3>
 
                 <div className="control-buttons">
-                    <motion.button
-                        className="control-button primary"
-                        onClick={onAddPerson}
-                        disabled={isSorting}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <span className="button-icon">➕</span>
-                        Add Person
-                    </motion.button>
+
 
                     <motion.button
                         className="control-button secondary"
@@ -64,16 +55,7 @@ const Controls = ({
                         {showImmediateSortedList ? 'Hide Preview' : 'Preview Sorted'}
                     </motion.button>
 
-                    <motion.button
-                        className="control-button tertiary"
-                        onClick={onStepSort}
-                        disabled={isSorting || heapSize === 0}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <span className="button-icon">⏭️</span>
-                        Step Extract
-                    </motion.button>
+
 
                     <motion.button
                         className="control-button reset"

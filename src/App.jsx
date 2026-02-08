@@ -58,7 +58,7 @@ function App() {
     setIsSorting(true); // Treat add animation as a sorting-like locked state
     let aborted = false;
     for (const step of steps) {
-      setHeap(new MaxHeap(step.heap));
+      setHeap(new MaxHeap(step.heap, true));
       setHighlightedIndices(step.highlighted);
       showNotification(step.description, 'info');
       if (isStoppedRef.current) {
