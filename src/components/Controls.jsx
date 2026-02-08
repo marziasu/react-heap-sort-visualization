@@ -17,6 +17,7 @@ const Controls = ({
     heapSize,
     darkMode,
     animationSpeed,
+    showImmediateSortedList,
     currentStep,
     totalSteps
 }) => {
@@ -52,15 +53,15 @@ const Controls = ({
                     </motion.button>
 
                     <motion.button
-                        className="control-button preview"
+                        className={`control-button preview ${showImmediateSortedList ? 'active' : ''}`}
                         onClick={onShowImmediateSortedList}
                         disabled={heapSize === 0}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        title="Show sorted list immediately without animation"
+                        title={showImmediateSortedList ? "Hide sorted list" : "Show sorted list immediately without animation"}
                     >
-                        <span className="button-icon">👁️</span>
-                        Preview Sorted
+                        <span className="button-icon">{showImmediateSortedList ? '🙈' : '👁️'}</span>
+                        {showImmediateSortedList ? 'Hide Preview' : 'Preview Sorted'}
                     </motion.button>
 
                     <motion.button
@@ -77,7 +78,7 @@ const Controls = ({
                     <motion.button
                         className="control-button reset"
                         onClick={onReset}
-                        disabled={isSorting}
+                        disabled={false}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >

@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import './SortedList.css';
 
-const SortedList = ({ sortedPeople }) => {
+const SortedList = ({ sortedPeople, isPreview }) => {
     return (
         <motion.div
             className="sorted-list-container"
@@ -30,7 +30,7 @@ const SortedList = ({ sortedPeople }) => {
                         {sortedPeople.map((person, index) => (
                             <motion.div
                                 key={`sorted-${person.personId}`}
-                                layoutId={`node-${person.personId}`}
+                                layoutId={isPreview ? undefined : `node-${person.personId}`}
                                 className="sorted-circle-item"
                                 initial={{ scale: 0.5, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}

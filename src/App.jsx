@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HeapTree from './components/HeapTree';
 import Controls from './components/Controls';
@@ -8,6 +8,12 @@ import { MaxHeap, heapSortWithIntuitionSteps } from './utils/heapOperations';
 import { initialPeople } from './data/initialData';
 import './App.css';
 
+
+
+
+// Memoized HeapTree to prevent re-renders when other state changes
+const MemoizedHeapTree = React.memo(HeapTree);
+
 function App() {
   const [heap, setHeap] = useState(null);
   const [highlightedIndices, setHighlightedIndices] = useState([]);
@@ -15,6 +21,7 @@ function App() {
   const [isSorting, setIsSorting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const isPausedRef = useRef(false);
+  const isStoppedRef = useRef(false);
   const [sortSteps, setSortSteps] = useState([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [animationSpeed, setAnimationSpeed] = useState(1200);
@@ -48,16 +55,24 @@ function App() {
     setNextPersonId(nextPersonId + 1);
 
     setIsSorting(true); // Treat add animation as a sorting-like locked state
+    let aborted = false;
     for (const step of steps) {
       setHeap(new MaxHeap(step.heap));
       setHighlightedIndices(step.highlighted);
       showNotification(step.description, 'info');
+      if (isStoppedRef.current) {
+        isStoppedRef.current = false;
+        aborted = true;
+        break;
+      }
       await new Promise(resolve => setTimeout(resolve, animationSpeed));
     }
 
     setIsSorting(false);
     setHighlightedIndices([]);
-    showNotification(`Added Person ${newPerson.personId} successfully`, 'success');
+    if (!aborted) {
+      showNotification(`Added Person ${newPerson.personId} successfully`, 'success');
+    }
   };
 
   // Perform complete heap sort with step-by-step intuition
@@ -74,9 +89,21 @@ function App() {
     const { allSteps, sorted } = heapSortWithIntuitionSteps(heap.getHeap());
     setSortSteps(allSteps);
 
+    let aborted = false;
     for (let i = 0; i < allSteps.length; i++) {
       while (isPausedRef.current) {
+        if (isStoppedRef.current) {
+          isStoppedRef.current = false;
+          aborted = true;
+          break;
+        }
         await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      if (isStoppedRef.current || aborted) {
+        isStoppedRef.current = false;
+        aborted = true;
+        break;
       }
 
       const step = allSteps[i];
@@ -95,7 +122,9 @@ function App() {
     setHighlightedIndices([]);
     setIsSorting(false);
     setSortSteps([]);
-    showNotification(`Heap sort complete!`, 'success');
+    if (!aborted) {
+      showNotification(`Heap sort complete!`, 'success');
+    }
   };
 
   // Extract one person (step-by-step intuition)
@@ -112,6 +141,10 @@ function App() {
         setSortedPeople([...sortedPeople, step.extracted]);
       }
       showNotification(step.description || 'Extracting...', 'info');
+      if (isStoppedRef.current) {
+        isStoppedRef.current = false;
+        break;
+      }
       await new Promise(resolve => setTimeout(resolve, animationSpeed + 200));
     }
 
@@ -120,15 +153,42 @@ function App() {
   };
 
   // Show full sorted list immediately (preview)
-  const handleShowImmediateSortedList = () => {
+  // Show full sorted list immediately (preview)
+  // const handleShowImmediateSortedList = () => {
+  //   if (!heap || heap.size() === 0) return;
+
+  //   if (showImmediateSortedList) {
+  //     setSortedPeople([]);
+  //     setShowImmediateSortedList(false);
+  //     showNotification('Preview hidden', 'info');
+  //   } else {
+  //     const tempHeap = new MaxHeap(heap.getHeap());
+  //     const { sorted } = heapSortWithIntuitionSteps(tempHeap.getHeap());
+  //     setSortedPeople(sorted);
+  //     setShowImmediateSortedList(true);
+  //     showNotification(`Preview: ${sorted.length} people sorted by weight`, 'info');
+  //   }
+  // };
+
+  // handleShowImmediateSortedList function টি useCallback দিয়ে wrap করুন
+  const handleShowImmediateSortedList = useCallback(() => {
     if (!heap || heap.size() === 0) return;
 
-    const tempHeap = new MaxHeap(heap.getHeap());
-    const { sorted } = heapSortWithIntuitionSteps(tempHeap.getHeap());
-    setSortedPeople(sorted);
-    setShowImmediateSortedList(true);
-    showNotification(`Preview: ${sorted.length} people sorted by weight`, 'info');
-  };
+    if (showImmediateSortedList) {
+      setSortedPeople([]);
+      setShowImmediateSortedList(false);
+      showNotification('Preview hidden', 'info');
+    } else {
+      const tempHeap = new MaxHeap(heap.getHeap());
+      const { sorted } = heapSortWithIntuitionSteps(tempHeap.getHeap());
+      setSortedPeople(sorted);
+      setShowImmediateSortedList(true);
+      showNotification(`Preview: ${sorted.length} people sorted by weight`, 'info');
+    }
+  }, [heap, showImmediateSortedList]);
+
+  // heap data memoize করুন
+  const heapData = useMemo(() => heap?.getHeap() || [], [heap]);
 
   // Toggle pause/resume
   const handleTogglePause = () => {
@@ -172,13 +232,24 @@ function App() {
 
   // Reset to initial state
   const handleReset = () => {
-    if (isSorting) return;
+    // Signal any running animation to stop
+    if (isSorting) {
+      isStoppedRef.current = true;
+      isPausedRef.current = false; // Unpause to let loop exit
+      setIsPaused(false);
+      // Wait a tick ensures the loop sees the stop flag? 
+      // Actually, since we set heap immediately below, visual reset is instant.
+      // The loop will exit on next iteration.
+    }
 
     const newHeap = new MaxHeap(initialPeople);
     setHeap(newHeap);
     setHighlightedIndices([]);
     setSortedPeople([]);
     setNextPersonId(31);
+    setIsSorting(false);
+    setShowImmediateSortedList(false); // Reset preview toggle
+    setSortSteps([]);
     showNotification('Reset to initial dataset', 'info');
   };
 
@@ -209,6 +280,8 @@ function App() {
       </div>
     );
   }
+
+
 
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
@@ -266,6 +339,7 @@ function App() {
               onPreviousStep={handlePreviousStep}
               onSpeedChange={handleSpeedChange}
               onShowImmediateSortedList={handleShowImmediateSortedList}
+              showImmediateSortedList={showImmediateSortedList}
               isSorting={isSorting}
               isPaused={isPaused}
               heapSize={heap.size()}
@@ -299,15 +373,18 @@ function App() {
                 )}
               </div>
 
-              <HeapTree
-                heap={heap.getHeap()}
+              <MemoizedHeapTree
+                heap={heapData}
                 highlightedIndices={highlightedIndices}
                 isPaused={isPaused}
               />
             </motion.div>
 
             {/* Sorted List (Always Visible Field Below Tree) */}
-            <SortedList sortedPeople={sortedPeople} />
+            <SortedList
+              sortedPeople={sortedPeople}
+              isPreview={showImmediateSortedList}
+            />
           </div>
         </div>
 
