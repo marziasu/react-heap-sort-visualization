@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import HeapTree from './components/HeapTree';
 import Controls from './components/Controls';
 import AddPersonForm from './components/AddPersonForm';
@@ -29,6 +29,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [notification, setNotification] = useState(null);
   const [showImmediateSortedList, setShowImmediateSortedList] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
 
   // Initialize heap on mount
   useEffect(() => {
@@ -250,6 +251,7 @@ function App() {
     setIsSorting(false);
     setShowImmediateSortedList(false); // Reset preview toggle
     setSortSteps([]);
+    setResetKey(prev => prev + 1); // Force remount of HeapTree
     showNotification('Reset to initial dataset', 'info');
   };
 
@@ -373,11 +375,14 @@ function App() {
                 )}
               </div>
 
-              <MemoizedHeapTree
-                heap={heapData}
-                highlightedIndices={highlightedIndices}
-                isPaused={isPaused}
-              />
+              <LayoutGroup id={`tree-${resetKey}`}>
+                <MemoizedHeapTree
+                  key={resetKey}
+                  heap={heapData}
+                  highlightedIndices={highlightedIndices}
+                  isPaused={isPaused}
+                />
+              </LayoutGroup>
             </motion.div>
 
             {/* Sorted List (Always Visible Field Below Tree) */}

@@ -11,11 +11,15 @@ export class MaxHeap {
 
         // Build heap from initial data
         if (initialData.length > 0) {
+            // Defensive copy to prevent mutation of imported data
+            // JSON parse/stringify is safest for simple objects here
+            const safeData = JSON.parse(JSON.stringify(initialData));
+
             if (skipBuild) {
                 // Direct copy without heapify (used for rendering intermediate states)
-                this.heap = [...initialData];
+                this.heap = safeData;
             } else {
-                this.buildHeap(initialData);
+                this.buildHeap(safeData);
             }
         }
     }
