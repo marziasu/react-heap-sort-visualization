@@ -46,7 +46,8 @@ const Controls = ({
                     <motion.button
                         className={`control-button preview ${showImmediateSortedList ? 'active' : ''}`}
                         onClick={onShowImmediateSortedList}
-                        disabled={heapSize === 0}
+                        // disabled={heapSize === 0}
+                        disabled={heapSize === 0 || (isSorting && !isPaused)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         title={showImmediateSortedList ? "Hide sorted list" : "Show sorted list immediately without animation"}
