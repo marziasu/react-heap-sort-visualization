@@ -27,19 +27,16 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
     // Calculate tree dimensions
     const maxLevels = Math.floor(Math.log2(heap.length)) + 1;
     const leavesCount = Math.pow(2, maxLevels - 1);
-    // Use 110px per leaf node for spacing (80px node + 30px gap)
     const treeWidth = Math.max(1000, leavesCount * 110);
     const treeHeight = maxLevels * 120 + 100;
 
-    // Calculate node position based on global tree width
+    // Calculate node position - centered coordinates
     const getNodePosition = (index) => {
         const level = Math.floor(Math.log2(index + 1));
         const positionInLevel = index - (Math.pow(2, level) - 1);
         const maxNodesInLevel = Math.pow(2, level);
 
-        // Center nodes within the total tree width
-        // x = (position + 0.5) * (totalWidth / nodesInThisLevel)
-        // This distributes the available width equally among nodes in the level, centering them.
+        // Calculate center position
         const x = (positionInLevel + 0.5) * (treeWidth / maxNodesInLevel);
         const y = level * 120 + 60;
 
@@ -54,7 +51,7 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
     const generateLines = () => {
         const lines = [];
         heap.forEach((person, index) => {
-            if (person.isGhost) return; // Don't draw lines from a ghost node
+            if (person.isGhost) return;
 
             const leftChild = 2 * index + 1;
             const rightChild = 2 * index + 2;
@@ -124,58 +121,68 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
                     {lines.map((line) => (
                         <motion.line
                             key={line.key}
-                            animate={{
-                                x1: line.x1,
-                                y1: line.y1,
-                                x2: line.x2,
-                                y2: line.y2,
-                                opacity: 1
-                            }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                            x1={line.x1}
+                            y1={line.y1}
+                            x2={line.x2}
+                            y2={line.y2}
                             className={`tree-line ${line.isHighlighted ? 'highlighted' : ''} ${line.isHighlighted && isPaused ? 'line-paused' : ''}`}
                             initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
                         />
                     ))}
                 </svg>
 
                 {/* Nodes Layer - HTML Elements */}
                 <div className="heap-nodes-layer">
-                    <AnimatePresence>
+                    <AnimatePresence mode="popLayout">
                         {heap.map((person, index) => {
                             const { x, y, level } = getNodePosition(index);
                             const isHighlighted = highlightedIndices.includes(index);
-                            const nodeKey = person.personId;
+                            const nodeKey = `node-${person.personId}`;
 
-                            console.log(`  🎨 Rendering node: ID:${person.personId} at index ${index}, key="${nodeKey}", ghost=${!!person.isGhost}`);
+                            console.log(`  🎨 Rendering: ID:${person.personId} at index ${index}, x:${x.toFixed(0)}, y:${y.toFixed(0)}`);
 
                             return (
                                 <motion.div
                                     key={nodeKey}
-                                    layoutId={`node-${nodeKey}`}
+                                    layoutId={nodeKey}
                                     className="heap-node-wrapper"
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{
+                                        x: x,  // ✅ Use x/y instead of left/top
+                                        y: y,  // ✅ Use x/y instead of left/top
                                         opacity: person.isGhost ? 0.2 : 1,
                                         scale: person.isGhost ? 0.8 : 1,
                                         zIndex: isHighlighted ? 100 : 1
                                     }}
-                                    onLayoutAnimationStart={() => {
-                                        console.log(`  🎬 Animation START: ID:${person.personId} at index ${index}`);
-                                    }}
-                                    onLayoutAnimationComplete={() => {
-                                        console.log(`  ✅ Animation COMPLETE: ID:${person.personId} at index ${index}`);
-                                    }}
-                                    exit={{ scale: 0, opacity: 0, y: -20 }}
+                                    exit={{ scale: 0, opacity: 0 }}
                                     style={{
                                         position: 'absolute',
-                                        left: x,
-                                        top: y
+                                        // ❌ NO left/top here
+                                        // ❌ NO transform: translate here
                                     }}
-                                    layout
+                                    layout  // ✅ Enable layout animations
                                     transition={{
-                                        layout: { type: "spring", stiffness: 120, damping: 25, mass: 1 },
+                                        x: {
+                                            type: "spring",
+                                            stiffness: 100,
+                                            damping: 20,
+                                            mass: 1
+                                        },
+                                        y: {
+                                            type: "spring",
+                                            stiffness: 100,
+                                            damping: 20,
+                                            mass: 1
+                                        },
                                         opacity: { duration: 0.3 },
-                                        scale: { duration: 0.3 }
+                                        scale: { duration: 0.3 },
+                                        layout: {
+                                            type: "spring",
+                                            stiffness: 100,
+                                            damping: 20
+                                        }
                                     }}
                                 >
                                     <HeapNode
@@ -183,7 +190,6 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
                                         isHighlighted={isHighlighted}
                                         isPaused={isPaused}
                                         level={level}
-                                        isGhost={person.isGhost}
                                     />
                                 </motion.div>
                             );
