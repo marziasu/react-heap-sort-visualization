@@ -448,9 +448,9 @@ function App() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <p>Built with React + Framer Motion | Max-Heap Data Structure</p>
+          <p>© 2026 Marzia Sultana</p>
           <p className="footer-info">
-            Production-level heap sort visualization with step-by-step animations
+            Max-Heap Data Structure Visualization · Built with React & Framer Motion
           </p>
         </motion.footer>
       </div>
