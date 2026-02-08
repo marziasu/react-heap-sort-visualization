@@ -24,6 +24,7 @@ function App() {
   const isStoppedRef = useRef(false);
   const [sortSteps, setSortSteps] = useState([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const currentStepIndexRef = useRef(0);
   const [animationSpeed, setAnimationSpeed] = useState(1200);
   const [nextPersonId, setNextPersonId] = useState(31);
   const [darkMode, setDarkMode] = useState(false);
@@ -90,16 +91,30 @@ function App() {
     const { allSteps, sorted } = heapSortWithIntuitionSteps(heap.getHeap());
     setSortSteps(allSteps);
 
+    // Reset indices to start
+    setCurrentStepIndex(0);
+    currentStepIndexRef.current = 0;
+
     let aborted = false;
-    for (let i = 0; i < allSteps.length; i++) {
+    let i = 0;
+    let lastPlayedStepIndex = 0;
+
+    while (i < allSteps.length) {
       while (isPausedRef.current) {
         if (isStoppedRef.current) {
           isStoppedRef.current = false;
           aborted = true;
           break;
         }
+        // Sync if user manually changed step while paused
+        if (currentStepIndexRef.current !== lastPlayedStepIndex) {
+          i = currentStepIndexRef.current;
+          lastPlayedStepIndex = i;
+        }
         await new Promise(resolve => setTimeout(resolve, 100));
       }
+
+
 
       if (isStoppedRef.current || aborted) {
         isStoppedRef.current = false;
@@ -107,8 +122,14 @@ function App() {
         break;
       }
 
+      if (i >= allSteps.length) break;
+
       const step = allSteps[i];
       setCurrentStepIndex(i);
+      // We just set the state to 'i', so we expect Ref to eventually become 'i'.
+      // Update our tracker to match this expectation.
+      lastPlayedStepIndex = i;
+
       setHeap(new MaxHeap(step.heap, true));  // skipBuild = true
       setHighlightedIndices(step.highlighted);
       setSortedPeople(step.sortedSoFar || []);
@@ -118,6 +139,8 @@ function App() {
       }
 
       await new Promise(resolve => setTimeout(resolve, animationSpeed + 200));
+
+      i++;
     }
 
     setHighlightedIndices([]);
@@ -259,6 +282,10 @@ function App() {
   const handleToggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
+
+  useEffect(() => {
+    currentStepIndexRef.current = currentStepIndex;
+  }, [currentStepIndex]);
 
   useEffect(() => {
     if (darkMode) {
