@@ -26,6 +26,7 @@ function App() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const currentStepIndexRef = useRef(0);
   const [animationSpeed, setAnimationSpeed] = useState(1200);
+  const animationSpeedRef = useRef(1200);
   const [nextPersonId, setNextPersonId] = useState(31);
   const [darkMode, setDarkMode] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -67,7 +68,7 @@ function App() {
         aborted = true;
         break;
       }
-      await new Promise(resolve => setTimeout(resolve, animationSpeed));
+      await new Promise(resolve => setTimeout(resolve, animationSpeedRef.current));
     }
 
     setIsSorting(false);
@@ -138,7 +139,7 @@ function App() {
         showNotification(step.description, 'info');
       }
 
-      await new Promise(resolve => setTimeout(resolve, animationSpeed + 200));
+      await new Promise(resolve => setTimeout(resolve, animationSpeedRef.current + 200));
 
       i++;
     }
@@ -286,6 +287,10 @@ function App() {
   useEffect(() => {
     currentStepIndexRef.current = currentStepIndex;
   }, [currentStepIndex]);
+
+  useEffect(() => {
+    animationSpeedRef.current = animationSpeed;
+  }, [animationSpeed]);
 
   useEffect(() => {
     if (darkMode) {

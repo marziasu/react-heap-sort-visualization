@@ -126,8 +126,8 @@ const Controls = ({
                             <label className="speed-label">Speed:</label>
                             <div className="speed-buttons">
                                 <motion.button
-                                    className={`speed-button ${animationSpeed === 400 ? 'active' : ''}`}
-                                    onClick={() => onSpeedChange(400)}
+                                    className={`speed-button ${animationSpeed === 100 ? 'active' : ''}`}
+                                    onClick={() => onSpeedChange(100)}
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                 >
