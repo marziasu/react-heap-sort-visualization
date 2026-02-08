@@ -260,7 +260,7 @@ function App() {
     setIsSorting(false);
     setShowImmediateSortedList(false); // Reset preview toggle
     setSortSteps([]);
-    setResetKey(prev => prev + 1); // Force remount of HeapTree
+    // setResetKey(prev => prev + 1); // Force remount of HeapTree
     showNotification('Reset to initial dataset', 'info');
   };
 
@@ -418,6 +418,7 @@ function App() {
                   <span className="tree-icon">🌲</span>
                   Binary Heap Tree
                 </h2>
+                {/* <div className="heap-size-badge">Heap Size: {heapData.size()}</div> */}
                 {isSorting && (
                   <motion.div
                     className="sorting-badge"
@@ -436,6 +437,7 @@ function App() {
                   highlightedIndices={highlightedIndices}
                   isPaused={isPaused}
                   onNodeClick={handleNodeClick}
+
                 />
               </LayoutGroup>
             </motion.div>
