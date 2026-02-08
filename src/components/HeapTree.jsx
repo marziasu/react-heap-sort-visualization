@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import HeapNode from './HeapNode';
 import './HeapTree.css';
 
-const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
+const HeapTree = ({ heap, highlightedIndices, isPaused, onNodeClick }) => {
     console.log("\n🎨 === HEAP TREE RENDER ===");
     console.log("Heap size:", heap?.length || 0);
     console.log("Highlighted indices:", highlightedIndices);
@@ -190,6 +190,7 @@ const HeapTree = ({ heap, highlightedIndices, isPaused }) => {
                                         isHighlighted={isHighlighted}
                                         isPaused={isPaused}
                                         level={level}
+                                        onClick={() => onNodeClick && onNodeClick(person)}
                                     />
                                 </motion.div>
                             );

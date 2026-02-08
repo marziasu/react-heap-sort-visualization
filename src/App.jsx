@@ -4,6 +4,7 @@ import HeapTree from './components/HeapTree';
 import Controls from './components/Controls';
 import AddPersonForm from './components/AddPersonForm';
 import SortedList from './components/SortedList';
+import NodeDetailsModal from './components/NodeDetailsModal';
 import { MaxHeap, heapSortWithIntuitionSteps } from './utils/heapOperations';
 import { initialPeople } from './data/initialData';
 import './App.css';
@@ -32,6 +33,7 @@ function App() {
   const [notification, setNotification] = useState(null);
   const [showImmediateSortedList, setShowImmediateSortedList] = useState(false);
   const [resetKey, setResetKey] = useState(0);
+  const [selectedNode, setSelectedNode] = useState(null);
 
   // Initialize heap on mount
   useEffect(() => {
@@ -284,6 +286,10 @@ function App() {
     setDarkMode(!darkMode);
   };
 
+  const handleNodeClick = (node) => {
+    setSelectedNode(node);
+  };
+
   useEffect(() => {
     currentStepIndexRef.current = currentStepIndex;
   }, [currentStepIndex]);
@@ -413,6 +419,7 @@ function App() {
                   heap={heapData}
                   highlightedIndices={highlightedIndices}
                   isPaused={isPaused}
+                  onNodeClick={handleNodeClick}
                 />
               </LayoutGroup>
             </motion.div>
@@ -424,6 +431,16 @@ function App() {
             />
           </div>
         </div>
+
+        <AnimatePresence>
+          {selectedNode && (
+            <NodeDetailsModal
+              selectedNode={selectedNode}
+              heap={heapData}
+              onClose={() => setSelectedNode(null)}
+            />
+          )}
+        </AnimatePresence>
 
         <motion.footer
           className="app-footer"
