@@ -35,6 +35,7 @@ function App() {
   const [resetKey, setResetKey] = useState(0);
   const [selectedNode, setSelectedNode] = useState(null);
 
+
   // Initialize heap on mount
   useEffect(() => {
     const newHeap = new MaxHeap(initialPeople);
@@ -179,24 +180,6 @@ function App() {
     setIsSorting(false);
   };
 
-  // Show full sorted list immediately (preview)
-  // Show full sorted list immediately (preview)
-  // const handleShowImmediateSortedList = () => {
-  //   if (!heap || heap.size() === 0) return;
-
-  //   if (showImmediateSortedList) {
-  //     setSortedPeople([]);
-  //     setShowImmediateSortedList(false);
-  //     showNotification('Preview hidden', 'info');
-  //   } else {
-  //     const tempHeap = new MaxHeap(heap.getHeap());
-  //     const { sorted } = heapSortWithIntuitionSteps(tempHeap.getHeap());
-  //     setSortedPeople(sorted);
-  //     setShowImmediateSortedList(true);
-  //     showNotification(`Preview: ${sorted.length} people sorted by weight`, 'info');
-  //   }
-  // };
-
   // handleShowImmediateSortedList function টি useCallback দিয়ে wrap করুন
   const handleShowImmediateSortedList = useCallback(() => {
     if (!heap || heap.size() === 0) return;
@@ -298,13 +281,33 @@ function App() {
     animationSpeedRef.current = animationSpeed;
   }, [animationSpeed]);
 
+  // useEffect(() => {
+  //   if (darkMode) {
+  //     document.body.classList.add('dark-mode');
+  //   } else {
+  //     document.body.classList.remove('dark-mode');
+  //   }
+  // }, [darkMode]);
+
+  // Load saved mode on mount
+  useEffect(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode === 'enabled') {
+      setDarkMode(true);
+    }
+  }, []);
+
+  // Save mode to localStorage whenever it changes
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark-mode');
+      localStorage.setItem('darkMode', 'enabled');
     } else {
       document.body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', 'disabled');
     }
   }, [darkMode]);
+
 
   if (!heap) {
     return (
@@ -333,10 +336,23 @@ function App() {
           transition={{ duration: 0.6 }}
         >
           <div className="header-content">
-            <h1 className="app-title">
-              <span className="title-icon">🎯</span>
-              Max-Heap Visualizer
-            </h1>
+            <div className="header-top">
+              <h1 className="app-title">
+                <span className="title-icon">🎯</span>
+                Max-Heap Visualizer
+              </h1>
+              {/* Dark Mode Toggle - Header এ */}
+              <motion.button
+                className="dark-mode-toggle-header"
+                onClick={handleToggleDarkMode}
+                whileHover={{ scale: 1.1, rotate: 180 }}
+                whileTap={{ scale: 0.9 }}
+                title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {darkMode ? '☀️' : '🌙'}
+              </motion.button>
+            </div>
+
             <p className="app-subtitle">
               Interactive heap sort visualization with 30-person dataset
             </p>
@@ -373,7 +389,7 @@ function App() {
               onHeapSort={handleHeapSort}
               onReset={handleReset}
               onStepSort={handleStepSort}
-              onToggleDarkMode={handleToggleDarkMode}
+              // onToggleDarkMode={handleToggleDarkMode}
               onTogglePause={handleTogglePause}
               onNextStep={handleNextStep}
               onPreviousStep={handlePreviousStep}
@@ -383,7 +399,7 @@ function App() {
               isSorting={isSorting}
               isPaused={isPaused}
               heapSize={heap.size()}
-              darkMode={darkMode}
+              // darkMode={darkMode}
               animationSpeed={animationSpeed}
               currentStep={currentStepIndex}
               totalSteps={sortSteps.length}

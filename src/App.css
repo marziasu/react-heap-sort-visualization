@@ -21,9 +21,10 @@
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  /* min-height: 100vh; */
+  min-height: 100vh;
   color: var(--text-primary);
   transition: background 0.3s ease;
+  overflow-x: hidden;
 }
 
 body.dark-mode {
@@ -34,27 +35,66 @@ body.dark-mode {
   background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
 }
 
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  position: relative;
+  width: 100%;
+}
+
+.dark-mode-toggle-header {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  /* Light Mode Styles */
+  background: rgba(99, 102, 241, 0.1);
+  border: 2px solid rgba(99, 102, 241, 0.2);
+  color: #6366f1;
+}
+
+.dark-mode-toggle-header:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
 .app {
-  /* min-height: 100vh; */
-  padding: 20px;
+  min-height: 100vh;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
 }
 
 .app-container {
-  width: fit-content;
-  min-width: 100%;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
   background: var(--bg-primary);
-  border-radius: 24px;
-  padding: 32px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: 0;
+  padding: 16px;
+  box-shadow: none;
   backdrop-filter: blur(10px);
   transition: background 0.3s ease;
 }
 
 .app-header {
   text-align: center;
-  margin-bottom: 32px;
-  padding-bottom: 24px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
   border-bottom: 2px solid rgba(99, 102, 241, 0.2);
 }
 
@@ -62,11 +102,11 @@ body.dark-mode {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .app-title {
-  font-size: 48px;
+  font-size: 32px;
   font-weight: 800;
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
@@ -74,17 +114,17 @@ body.dark-mode {
   background-clip: text;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   margin: 0;
 }
 
 .title-icon {
-  font-size: 56px;
+  font-size: 36px;
   filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.3));
 }
 
 .app-subtitle {
-  font-size: 18px;
+  font-size: 13px;
   color: var(--text-secondary);
   font-weight: 500;
   max-width: 600px;
@@ -94,14 +134,14 @@ body.dark-mode {
   position: fixed;
   top: 20px;
   right: 20px;
-  padding: 16px 24px;
+  padding: 12px 20px;
   border-radius: 12px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
 }
@@ -122,80 +162,88 @@ body.dark-mode {
 }
 
 .notification-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .app-content {
   display: grid;
-  grid-template-columns: 450px 1fr;
-  gap: 32px;
-  margin-bottom: 32px;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .left-panel {
   display: flex;
   flex-direction: column;
   gap: 0;
+  max-width: 360px;
 }
 
 .right-panel {
-  min-height: 600px;
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
 }
 
 .tree-container {
   background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 14px;
+  padding: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 2px solid rgba(99, 102, 241, 0.1);
-  min-height: 600px;
+  min-height: auto;
+  max-height: 550px;
+  overflow: auto;
+  width: 100%;
 }
 
 .tree-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .tree-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--accent-primary);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin: 0;
 }
 
 .tree-icon {
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .sorting-badge {
   background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
   color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 18px;
+  font-size: 13px;
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
 }
 
 .app-footer {
   text-align: center;
-  padding-top: 24px;
+  padding-top: 12px;
   border-top: 2px solid rgba(99, 102, 241, 0.2);
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 11px;
 }
 
 .footer-info {
-  margin-top: 8px;
-  font-size: 12px;
+  margin-top: 3px;
+  font-size: 10px;
   opacity: 0.8;
 }
 
@@ -215,6 +263,7 @@ body.dark-mode {
   font-size: 64px;
 }
 
+/* Responsive Design */
 @media (max-width: 1200px) {
   .app-content {
     grid-template-columns: 1fr;
@@ -222,6 +271,7 @@ body.dark-mode {
 
   .left-panel {
     order: 2;
+    max-width: 100%;
   }
 
   .right-panel {
@@ -231,37 +281,54 @@ body.dark-mode {
 
 @media (max-width: 768px) {
   .app-container {
-    padding: 16px;
+    padding: 12px;
   }
 
   .app-title {
-    font-size: 32px;
+    font-size: 24px;
   }
 
   .title-icon {
-    font-size: 40px;
+    font-size: 28px;
   }
 
   .app-subtitle {
-    font-size: 14px;
+    font-size: 11px;
   }
 
   .notification {
     top: 10px;
     right: 10px;
     left: 10px;
-    font-size: 12px;
+    font-size: 11px;
+  }
+
+  .app-content {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tree-container {
+    max-height: 350px;
   }
 }
 
 @media (max-width: 480px) {
   .app {
-    padding: 10px;
+    padding: 0;
   }
 
   .app-title {
-    font-size: 24px;
+    font-size: 20px;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
+  }
+
+  .title-icon {
+    font-size: 24px;
+  }
+
+  .app-content {
+    gap: 10px;
   }
 }

@@ -169,14 +169,14 @@ const Controls = ({
                     </motion.div>
                 </div>
 
-                <motion.button
+                {/* <motion.button
                     className="dark-mode-toggle"
                     onClick={onToggleDarkMode}
                     whileHover={{ scale: 1.1, rotate: 180 }}
                     whileTap={{ scale: 0.9 }}
                 >
                     {darkMode ? '☀️' : '🌙'}
-                </motion.button>
+                </motion.button> */}
             </div>
         </div>
     );

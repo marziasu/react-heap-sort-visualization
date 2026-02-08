@@ -27,8 +27,8 @@ const HeapTree = ({ heap, highlightedIndices, isPaused, onNodeClick }) => {
     // Calculate tree dimensions
     const maxLevels = Math.floor(Math.log2(heap.length)) + 1;
     const leavesCount = Math.pow(2, maxLevels - 1);
-    const treeWidth = Math.max(1000, leavesCount * 110);
-    const treeHeight = maxLevels * 120 + 100;
+    const treeWidth = Math.max(800, leavesCount * 80);
+    const treeHeight = maxLevels * 90 + 80;
 
     // Calculate node position - centered coordinates
     const getNodePosition = (index) => {
@@ -38,7 +38,7 @@ const HeapTree = ({ heap, highlightedIndices, isPaused, onNodeClick }) => {
 
         // Calculate center position
         const x = (positionInLevel + 0.5) * (treeWidth / maxNodesInLevel);
-        const y = level * 120 + 60;
+        const y = level * 90 + 50;
 
         return {
             x: isNaN(x) ? 0 : x,
@@ -111,11 +111,18 @@ const HeapTree = ({ heap, highlightedIndices, isPaused, onNodeClick }) => {
                     flexShrink: 0
                 }}
             >
+                {/* SVG এবং Nodes একই container এ */}
                 <svg
                     className="heap-tree-svg"
                     width={treeWidth}
                     height={treeHeight}
                     viewBox={`0 0 ${treeWidth} ${treeHeight}`}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        pointerEvents: 'none' // SVG lines click করা যাবে না
+                    }}
                 >
                     {/* Connection lines */}
                     {lines.map((line) => (
@@ -134,7 +141,16 @@ const HeapTree = ({ heap, highlightedIndices, isPaused, onNodeClick }) => {
                 </svg>
 
                 {/* Nodes Layer - HTML Elements */}
-                <div className="heap-nodes-layer">
+                <div
+                    className="heap-nodes-layer"
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%'
+                    }}
+                >
                     <AnimatePresence mode="popLayout">
                         {heap.map((person, index) => {
                             const { x, y, level } = getNodePosition(index);
@@ -150,8 +166,8 @@ const HeapTree = ({ heap, highlightedIndices, isPaused, onNodeClick }) => {
                                     className="heap-node-wrapper"
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{
-                                        x: x,  // ✅ Use x/y instead of left/top
-                                        y: y,  // ✅ Use x/y instead of left/top
+                                        x: x - 25, // Node center করার জন্য (50px width এর half)
+                                        y: y - 25, // Node center করার জন্য (50px height এর half)
                                         opacity: person.isGhost ? 0.2 : 1,
                                         scale: person.isGhost ? 0.8 : 1,
                                         zIndex: isHighlighted ? 100 : 1
@@ -159,29 +175,29 @@ const HeapTree = ({ heap, highlightedIndices, isPaused, onNodeClick }) => {
                                     exit={{ scale: 0, opacity: 0 }}
                                     style={{
                                         position: 'absolute',
-                                        // ❌ NO left/top here
-                                        // ❌ NO transform: translate here
+                                        width: '50px',
+                                        height: '50px'
                                     }}
-                                    layout  // ✅ Enable layout animations
+                                    layout
                                     transition={{
                                         x: {
                                             type: "spring",
-                                            stiffness: 100,
-                                            damping: 20,
-                                            mass: 1
+                                            stiffness: 120,
+                                            damping: 22,
+                                            mass: 0.8
                                         },
                                         y: {
                                             type: "spring",
-                                            stiffness: 100,
-                                            damping: 20,
-                                            mass: 1
+                                            stiffness: 120,
+                                            damping: 22,
+                                            mass: 0.8
                                         },
-                                        opacity: { duration: 0.3 },
-                                        scale: { duration: 0.3 },
+                                        opacity: { duration: 0.25 },
+                                        scale: { duration: 0.25 },
                                         layout: {
                                             type: "spring",
-                                            stiffness: 100,
-                                            damping: 20
+                                            stiffness: 120,
+                                            damping: 22
                                         }
                                     }}
                                 >
