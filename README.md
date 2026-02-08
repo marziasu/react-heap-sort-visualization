@@ -20,11 +20,11 @@ A professional, interactive React application designed to visualize Max-Heap dat
 <!-- 📸 PLACEHOLDER: Adding a new person (with visible swaps / animation) -->
 ![Adding Person Animation](./screenshots/add-person-animation.gif)
 
-### 3. Heap Sort Process & Results
-*View step-by-step extractions as the maximum element is removed and the tree is reorganized into a sorted list.*
+### 3. Heap Sort Process (Animation)
+*Detailed step-by-step extractions showing how the tree reorganizes and the sorted list is built.*
 
-<!-- 📸 PLACEHOLDER: Heap sort steps and final sorted list -->
-![Heap Sort Process](./screenshots/heap-sort-steps.png)
+<!-- 📸 Showcase: Heap Sort Animation -->
+![Heap Sort Process](./screenshots/heap-sort-process.gif)
 
 ### 4. Interactive Node Details
 *Click on any node to reveal its metadata and structural relationships in a clean, professional modal.*
